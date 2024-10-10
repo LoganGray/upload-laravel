@@ -19,6 +19,7 @@
                 <div id="progress-bar" class="progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%</div>
             </div>
         </div>
+        <div id="message" class="mt-3 alert" style="display: none;"></div>
         <h2 class="mt-5">Uploaded Files</h2>
         <ul id="file-list" class="list-group">
             @forelse ($files as $file)
@@ -115,11 +116,25 @@
                 .then(response => {
                     if (response.data.success) {
                         updateFileList();
+                        showMessage(response.data.message, 'success');
+                    } else {
+                        showMessage(response.data.message, 'danger');
                     }
                 })
                 .catch(error => {
                     console.error('Error deleting file:', error);
+                    showMessage('Error deleting file. Please try again.', 'danger');
                 });
+        }
+
+        function showMessage(message, type) {
+            const messageElement = document.getElementById('message');
+            messageElement.textContent = message;
+            messageElement.className = `mt-3 alert alert-${type}`;
+            messageElement.style.display = 'block';
+            setTimeout(() => {
+                messageElement.style.display = 'none';
+            }, 5000);
         }
 
         // Add delete listeners when the page loads

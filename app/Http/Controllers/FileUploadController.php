@@ -33,13 +33,19 @@ class FileUploadController extends Controller
 
     public function destroy(File $file)
     {
-        // Delete the file from storage
-        Storage::disk('public')->delete($file->path);
+        try {
+            // Delete the file from storage
+            if (Storage::disk('public')->exists($file->path)) {
+                Storage::disk('public')->delete($file->path);
+            }
 
-        // Delete the file record from the database
-        $file->delete();
+            // Delete the file record from the database
+            $file->delete();
 
-        return response()->json(['success' => true]);
+            return response()->json(['success' => true, 'message' => 'File deleted successfully']);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => 'Error deleting file: ' . $e->getMessage()], 500);
+        }
     }
 }
 
