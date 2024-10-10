@@ -30,4 +30,17 @@ class FileUploadController extends Controller
 
         return response()->json(['success' => true]);
     }
+
+    public function destroy(File $file)
+    {
+        // Delete the file from storage
+        Storage::disk('public')->delete($file->path);
+
+        // Delete the file record from the database
+        $file->delete();
+
+        return response()->json(['success' => true]);
+    }
 }
+
+use Illuminate\Support\Facades\Storage;
