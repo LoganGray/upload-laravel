@@ -22,7 +22,10 @@
         <h2 class="mt-5">Uploaded Files</h2>
         <ul id="file-list" class="list-group">
             @forelse ($files as $file)
-                <li class="list-group-item">{{ $file->name }}</li>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    {{ $file->name }}
+                    <button class="btn btn-danger btn-sm delete-file" data-id="{{ $file->id }}">Delete</button>
+                </li>
             @empty
                 <li class="list-group-item">No files uploaded</li>
             @endforelse
@@ -92,10 +95,35 @@
                 const htmlDoc = parser.parseFromString(response.data, 'text/html');
                 const newFileList = htmlDoc.getElementById('file-list');
                 fileList.innerHTML = newFileList.innerHTML;
+                addDeleteListeners();
             }).catch(error => {
                 console.error('Error updating file list:', error);
             });
         }
+
+        function addDeleteListeners() {
+            document.querySelectorAll('.delete-file').forEach(button => {
+                button.addEventListener('click', function() {
+                    const fileId = this.getAttribute('data-id');
+                    deleteFile(fileId);
+                });
+            });
+        }
+
+        function deleteFile(fileId) {
+            axios.delete(`/delete/${fileId}`)
+                .then(response => {
+                    if (response.data.success) {
+                        updateFileList();
+                    }
+                })
+                .catch(error => {
+                    console.error('Error deleting file:', error);
+                });
+        }
+
+        // Add delete listeners when the page loads
+        addDeleteListeners();
     </script>
 </body>
 </html>
