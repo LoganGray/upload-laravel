@@ -12,6 +12,8 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('path');
+            $table->string('category')->default('none');
+            $table->string('stage')->nullable();
             $table->timestamps();
         });
     }

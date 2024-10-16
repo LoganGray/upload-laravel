@@ -21,6 +21,7 @@ class StorageController extends Controller
         $file = File::create([
             'name' => $filename,
             'path' => $path,
+            'category' => 'none',
         ]);
 
         return response()->json(['success' => true, 'file' => $file]);
@@ -41,5 +42,23 @@ class StorageController extends Controller
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => 'Error deleting file: ' . $e->getMessage()], 500);
         }
+    }
+
+    public function categorize()
+    {
+        $files = File::where('category', 'none')->get();
+        $categories = ['Hitting', 'Base Running', 'Fielding', 'Baseball IQ'];
+        return view('categorize', compact('files', 'categories'));
+    }
+
+    public function updateCategory(Request $request, File $file)
+    {
+        $request->validate([
+            'category' => 'required|in:Hitting,Base Running,Fielding,Baseball IQ',
+        ]);
+
+        $file->update(['category' => $request->category]);
+
+        return response()->json(['success' => true, 'message' => 'Category updated successfully']);
     }
 }

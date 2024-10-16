@@ -7,4 +7,6 @@ use App\Http\Controllers\StorageController;
 Route::get('/', [FileUploadController::class, 'index']);
 Route::post('/upload', [StorageController::class, 'store']);
 Route::delete('/delete/{file}', [StorageController::class, 'destroy']);
+Route::get('/categorize', [StorageController::class, 'categorize']);
+Route::post('/categorize/{file}', [StorageController::class, 'updateCategory']);
 
