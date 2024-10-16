@@ -1,7 +1,6 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
     <h2>Categorize Files</h2>
     <table class="table">
         <thead>
@@ -30,8 +29,6 @@
             @endforeach
         </tbody>
     </table>
-</div>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const updateButtons = document.querySelectorAll('.update-category');
