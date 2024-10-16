@@ -14,17 +14,22 @@ class StorageController extends Controller
             'file' => 'required|file|max:10240', // Max file size 10MB
         ]);
 
-        $uploadedFile = $request->file('file');
-        $filename = time() . '_' . $uploadedFile->getClientOriginalName();
-        $path = $uploadedFile->storeAs('uploads', $filename, 'public');
+        try {
+            $uploadedFile = $request->file('file');
+            $filename = time() . '_' . $uploadedFile->getClientOriginalName();
+            $path = $uploadedFile->storeAs('uploads', $filename, 'public');
 
-        $file = File::create([
-            'name' => $filename,
-            'path' => $path,
-            'category' => 'none',
-        ]);
+            $file = File::create([
+                'name' => $filename,
+                'path' => $path,
+                'category' => 'none',
+                'stage' => 1, // Default stage
+            ]);
 
-        return response()->json(['success' => true, 'file' => $file]);
+            return response()->json(['success' => true, 'file' => $file]);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => 'Error uploading file: ' . $e->getMessage()], 500);
+        }
     }
 
     public function destroy(File $file)

@@ -25,12 +25,17 @@
         </ul>
     </div>
 
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script>
         const dropArea = document.getElementById('drop-area');
         const fileInput = document.getElementById('fileInput');
         const progressWrapper = document.getElementById('progress-wrapper');
         const progressBar = document.getElementById('progress-bar');
         const fileList = document.getElementById('file-list');
+        const messageElement = document.getElementById('message');
+
+        // Set up CSRF token for all Axios requests
+        axios.defaults.headers.common['X-CSRF-TOKEN'] = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
         dropArea.addEventListener('click', () => fileInput.click());
         dropArea.addEventListener('dragover', (e) => {
@@ -74,9 +79,11 @@
             }).then(response => {
                 if (response.data.success) {
                     updateFileList();
+                    showMessage('File uploaded successfully', 'success');
                 }
             }).catch(error => {
                 console.error('Error uploading file:', error);
+                showMessage('Error uploading file. Please try again.', 'danger');
             }).finally(() => {
                 progressWrapper.style.display = 'none';
             });
@@ -120,7 +127,6 @@
         }
 
         function showMessage(message, type) {
-            const messageElement = document.getElementById('message');
             messageElement.textContent = message;
             messageElement.className = `mt-3 alert alert-${type}`;
             messageElement.style.display = 'block';
