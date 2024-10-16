@@ -3,7 +3,7 @@
 @section('content')
     <h2>Categorize Files</h2>
     <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-12">
             <h3>Uncategorized Files</h3>
             <table class="table">
                 <thead>
@@ -41,7 +41,12 @@
                 </tbody>
             </table>
         </div>
-        <div class="col-md-6">
+    </div>
+
+    <hr>
+
+    <div class="row mt-4">
+        <div class="col-md-12">
             <h3>Categorized Files</h3>
             <div class="bg-light p-3">
                 <table class="table">
