@@ -1,15 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>File Upload</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-</head>
-<body>
-    <div class="container mt-5">
-        <h1>File Upload</h1>
+@extends('layouts.app')
+
+@section('content')
+    <h1>File Upload</h1>
         <div id="drop-area" class="border border-dashed p-5 text-center">
             <p>Drag and drop files here or click to select</p>
             <input type="file" id="fileInput" style="display: none;">
@@ -140,5 +132,4 @@
         // Add delete listeners when the page loads
         addDeleteListeners();
     </script>
-</body>
-</html>
+@endsection
