@@ -46,7 +46,10 @@ class StorageController extends Controller
 
     public function categorize()
     {
-        $files = File::where('category', 'none')->get();
+        $files = File::orderBy('category')
+                     ->orderBy('stage')
+                     ->orderBy('name')
+                     ->get();
         $categories = ['Hitting', 'Base Running', 'Fielding', 'Baseball IQ'];
         return view('categorize', compact('files', 'categories'));
     }

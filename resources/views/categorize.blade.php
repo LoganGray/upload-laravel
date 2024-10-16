@@ -2,41 +2,86 @@
 
 @section('content')
     <h2>Categorize Files</h2>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>File Name</th>
-                <th>Category</th>
-                <th>Stage</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach($files as $file)
-            <tr>
-                <td>{{ $file->name }}</td>
-                <td>
-                    <select class="form-control category-select" data-file-id="{{ $file->id }}">
-                        <option value="">Select Category</option>
-                        @foreach($categories as $category)
-                        <option value="{{ $category }}" {{ $file->category == $category ? 'selected' : '' }}>{{ $category }}</option>
+    <div class="row">
+        <div class="col-md-6">
+            <h3>Uncategorized Files</h3>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>File Name</th>
+                        <th>Category</th>
+                        <th>Stage</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($files->where('category', 'none') as $file)
+                    <tr>
+                        <td>{{ $file->name }}</td>
+                        <td>
+                            <select class="form-control category-select" data-file-id="{{ $file->id }}">
+                                <option value="">Select Category</option>
+                                @foreach($categories as $category)
+                                <option value="{{ $category }}">{{ $category }}</option>
+                                @endforeach
+                            </select>
+                        </td>
+                        <td>
+                            <select class="form-control stage-select" data-file-id="{{ $file->id }}">
+                                @for ($i = 1; $i <= 10; $i++)
+                                <option value="{{ $i }}">{{ $i }}</option>
+                                @endfor
+                            </select>
+                        </td>
+                        <td>
+                            <button class="btn btn-primary update-file" data-file-id="{{ $file->id }}">Update</button>
+                        </td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+        <div class="col-md-6">
+            <h3>Categorized Files</h3>
+            <div class="bg-light p-3">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>File Name</th>
+                            <th>Category</th>
+                            <th>Stage</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($files->where('category', '!=', 'none') as $file)
+                        <tr>
+                            <td>{{ $file->name }}</td>
+                            <td>
+                                <select class="form-control category-select" data-file-id="{{ $file->id }}">
+                                    @foreach($categories as $category)
+                                    <option value="{{ $category }}" {{ $file->category == $category ? 'selected' : '' }}>{{ $category }}</option>
+                                    @endforeach
+                                </select>
+                            </td>
+                            <td>
+                                <select class="form-control stage-select" data-file-id="{{ $file->id }}">
+                                    @for ($i = 1; $i <= 10; $i++)
+                                    <option value="{{ $i }}" {{ $file->stage == $i ? 'selected' : '' }}>{{ $i }}</option>
+                                    @endfor
+                                </select>
+                            </td>
+                            <td>
+                                <button class="btn btn-primary update-file" data-file-id="{{ $file->id }}">Update</button>
+                            </td>
+                        </tr>
                         @endforeach
-                    </select>
-                </td>
-                <td>
-                    <select class="form-control stage-select" data-file-id="{{ $file->id }}">
-                        @for ($i = 1; $i <= 10; $i++)
-                        <option value="{{ $i }}" {{ $file->stage == $i ? 'selected' : '' }}>{{ $i }}</option>
-                        @endfor
-                    </select>
-                </td>
-                <td>
-                    <button class="btn btn-primary update-file" data-file-id="{{ $file->id }}">Update</button>
-                </td>
-            </tr>
-            @endforeach
-        </tbody>
-    </table>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const updateButtons = document.querySelectorAll('.update-file');
@@ -63,8 +108,7 @@ document.addEventListener('DOMContentLoaded', function() {
             .then(data => {
                 if (data.success) {
                     alert('File updated successfully');
-                    // Optionally, you can remove the row or update its appearance
-                    // this.closest('tr').remove();
+                    location.reload(); // Reload the page to reflect changes
                 } else {
                     alert('Error updating file');
                 }
