@@ -55,10 +55,14 @@ class StorageController extends Controller
     {
         $request->validate([
             'category' => 'required|in:Hitting,Base Running,Fielding,Baseball IQ',
+            'stage' => 'required|integer|min:1|max:10',
         ]);
 
-        $file->update(['category' => $request->category]);
+        $file->update([
+            'category' => $request->category,
+            'stage' => $request->stage,
+        ]);
 
-        return response()->json(['success' => true, 'message' => 'Category updated successfully']);
+        return response()->json(['success' => true, 'message' => 'File updated successfully']);
     }
 }
