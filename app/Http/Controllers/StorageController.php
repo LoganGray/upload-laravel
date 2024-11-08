@@ -11,7 +11,7 @@ class StorageController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'file' => 'required|file|max:10240', // Max file size 10MB
+            'file' => 'required|file|max:310240', // Max file size 10MB
         ]);
 
         try {
